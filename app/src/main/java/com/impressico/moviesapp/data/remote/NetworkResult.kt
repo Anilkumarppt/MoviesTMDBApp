@@ -1,7 +1,7 @@
-package com.impressico.recipesapp.data.remote
+package com.impressico.moviesapp.data.remote
 
 
-import com.impressico.recipesapp.data.remote.model.ErrorResponse
+import com.impressico.moviesapp.data.remote.model.ErrorResponse
 
 /*With this sealed interface subclass don't need to be placed in same package,
 * which means we can use the class name as it is.

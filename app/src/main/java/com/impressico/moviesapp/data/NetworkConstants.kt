@@ -1,4 +1,4 @@
-package com.impressico.recipesapp.data
+package com.impressico.moviesapp.data
 
 object NetworkConstants {
 
@@ -6,7 +6,7 @@ object NetworkConstants {
 
     const val GET_POPULAR = "movie/popular"
 
-    const val API_PARAM = "api_key"
+    const val API_PARAM = "Authorization"
     const val CONNECT_TIMEOUT = 20L
     const val READ_TIMEOUT = 60L
     const val WRITE_TIMEOUT = 120L

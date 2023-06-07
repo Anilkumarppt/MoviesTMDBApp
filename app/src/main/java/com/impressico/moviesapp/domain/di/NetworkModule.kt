@@ -1,12 +1,17 @@
-package com.impressico.recipesapp.domain.repository.di
+package com.impressico.moviesapp.domain.di
 
 import com.google.gson.GsonBuilder
-import com.impressico.recipesapp.data.AuthInterceptor
-import com.impressico.recipesapp.data.NetworkConstants.BASE_URL
-import com.impressico.recipesapp.data.NetworkConstants.CONNECT_TIMEOUT
-import com.impressico.recipesapp.data.NetworkConstants.READ_TIMEOUT
-import com.impressico.recipesapp.data.NetworkConstants.WRITE_TIMEOUT
-import com.impressico.recipesapp.data.remote.apiservice.TMDBMovieApiService
+import com.impressico.moviesapp.data.AuthInterceptor
+import com.impressico.moviesapp.data.NetworkConstants.BASE_URL
+import com.impressico.moviesapp.data.NetworkConstants.CONNECT_TIMEOUT
+import com.impressico.moviesapp.data.NetworkConstants.READ_TIMEOUT
+import com.impressico.moviesapp.data.NetworkConstants.WRITE_TIMEOUT
+import com.impressico.moviesapp.data.PopularRemoteDataSource
+import com.impressico.moviesapp.data.remote.PopularRemoteDataSourceImpl
+import com.impressico.moviesapp.data.remote.RemoteDataSource
+import com.impressico.moviesapp.data.remote.apiservice.TMDBMovieApiService
+import com.impressico.moviesapp.data.repositoryImpl.PopularMovieRepoImpl
+import com.impressico.moviesapp.domain.repository.PopularMovieRepo
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -50,5 +55,14 @@ object NetworkModule {
     fun provideMovieAPI(retrofit: Retrofit.Builder): TMDBMovieApiService {
         return retrofit.build().create(TMDBMovieApiService::class.java)
     }
+    @Provides
+    @Singleton
+    fun provideRemoteSource(): RemoteDataSource = RemoteDataSource()
 
+    @Provides
+    @Singleton
+    fun providesPopularRemoteDataSource(tmdbMovieApiService: TMDBMovieApiService,remoteDataSource:RemoteDataSource):PopularRemoteDataSource=PopularRemoteDataSourceImpl(tmdbMovieApiService, remoteDataSource)
+    @Provides
+    @Singleton
+    fun providePopularRemoteDataSourceImpl(popularRemoteData: PopularRemoteDataSource):PopularMovieRepo=PopularMovieRepoImpl(popularRemoteData)
 }

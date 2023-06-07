@@ -1,4 +1,4 @@
-package com.impressico.recipesapp.data
+package com.impressico.moviesapp.data
 
 import com.impressico.recipesapp.BuildConfig
 import okhttp3.HttpUrl
@@ -14,14 +14,13 @@ class AuthInterceptor @Inject constructor():Interceptor {
         val original:Request=chain.request()
         val originalHttpURL:HttpUrl=original.url
 
-        val url=originalHttpURL.newBuilder().
-        addQueryParameter(NetworkConstants.API_PARAM, "")
-            .build()
-        val requestBuilder:Request.Builder=original.newBuilder().url(url = url)
-
-        val request:Request=requestBuilder.build()
-
-        return chain.proceed(request = request)
+        /*val url=originalHttpURL.newBuilder().
+        addQueryParameter(NetworkConstants.API_PARAM, BuildConfig.API_KEY)
+            .build()*/
+        val newRequest=original.newBuilder().
+        header(NetworkConstants.API_PARAM, BuildConfig.API_KEY)
+            .header("accept", "application/json")
+        return chain.proceed(newRequest.build())
 
 
     }

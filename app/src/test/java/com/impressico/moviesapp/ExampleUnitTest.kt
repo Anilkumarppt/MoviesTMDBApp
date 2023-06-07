@@ -1,4 +1,4 @@
-package com.impressico.recipesapp
+package com.impressico.moviesapp
 
 import org.junit.Test
 

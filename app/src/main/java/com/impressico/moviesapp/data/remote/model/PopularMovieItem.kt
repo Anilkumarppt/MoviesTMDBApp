@@ -1,4 +1,4 @@
-package com.impressico.recipesapp.data.remote.model
+package com.impressico.moviesapp.data.remote.model
 
 data class PopularMovieItem(
     val adult: Boolean,

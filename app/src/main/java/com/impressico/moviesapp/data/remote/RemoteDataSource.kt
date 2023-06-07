@@ -1,7 +1,7 @@
-package com.impressico.recipesapp.data.remote
+package com.impressico.moviesapp.data.remote
 
 import com.google.gson.Gson
-import com.impressico.recipesapp.data.remote.model.ErrorResponse
+import com.impressico.moviesapp.data.remote.model.ErrorResponse
 import retrofit2.HttpException
 import retrofit2.Response
 

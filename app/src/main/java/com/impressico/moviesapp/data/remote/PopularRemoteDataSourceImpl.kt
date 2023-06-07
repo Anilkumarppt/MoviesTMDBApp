@@ -1,10 +1,8 @@
-package com.impressico.recipesapp.data.remote
+package com.impressico.moviesapp.data.remote
 
-import com.impressico.recipesapp.data.PopularRemoteDataSource
-import com.impressico.recipesapp.data.remote.apiservice.TMDBMovieApiService
-import com.impressico.recipesapp.data.remote.model.ErrorResponse
-import com.impressico.recipesapp.data.remote.model.PopularMovie
-import retrofit2.Response
+import com.impressico.moviesapp.data.PopularRemoteDataSource
+import com.impressico.moviesapp.data.remote.apiservice.TMDBMovieApiService
+import com.impressico.moviesapp.data.remote.model.PopularMovie
 import javax.inject.Inject
 
 class PopularRemoteDataSourceImpl @Inject constructor(val tmdbMovieApiService: TMDBMovieApiService,private val remoteDataSource:RemoteDataSource) :PopularRemoteDataSource{

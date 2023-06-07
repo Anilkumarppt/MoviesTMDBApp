@@ -10,7 +10,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.impressico.recipesapp"
+        applicationId "com.impressico.moviesapp"
         minSdk 22
         targetSdk 33
         versionCode 1
@@ -58,6 +58,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
     implementation 'androidx.fragment:fragment:1.5.6'
 
+    implementation("androidx.fragment:fragment-ktx:1.5.6")
+    implementation("androidx.activity:activity-ktx:1.5.6")
     def lifecycle_version = '2.5.1'
     def retrofit_version = "2.9.0"
 
