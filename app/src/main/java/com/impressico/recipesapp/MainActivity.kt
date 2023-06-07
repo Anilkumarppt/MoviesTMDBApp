@@ -12,5 +12,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mBinding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
+        setSupportActionBar(mBinding.toolbar.toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(true)
+
+
+
     }
 }
