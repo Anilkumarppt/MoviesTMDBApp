@@ -13,6 +13,7 @@ class PopularMovieRepoImpl @Inject constructor(private val remoteDataSource: Pop
 
     override suspend fun getPopularMovies(): Flow<NetworkResult<PopularMovie>> {
         return flow {
+
            emit( remoteDataSource.getPopularMovies(1))
         }
     }

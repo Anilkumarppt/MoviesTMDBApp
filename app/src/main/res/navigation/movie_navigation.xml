@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/movie_navigation"
+    app:startDestination="@id/popular_movies_list">
+
+    <fragment
+        android:id="@+id/popular_movies_list"
+        android:name="com.impressico.moviesapp.presentation.popularmovies.PopularMoviesList"
+        tools:layout="PopularMoviesList">
+        <action
+            android:id="@+id/action_to_movie_detail_item"
+            app:destination="@id/movie_details_screen"/>
+    </fragment>
+    <fragment
+        android:id="@+id/movie_details_screen"
+        android:name="com.impressico.moviesapp.presentation.popularmovies.MovieDetailedItem"
+        tools:layout="MovieDetailsScreen">
+        <action
+            android:id="@+id/action_to_popular_list"
+            app:destination="@id/popular_movies_list"/>
+    </fragment>
+</navigation>

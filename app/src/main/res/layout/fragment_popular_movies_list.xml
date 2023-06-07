@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_orange_gradient"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.impressico.moviesapp.presentation.PopularMoviesList">
+    tools:context="com.impressico.moviesapp.presentation.popularmovies.PopularMoviesList">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,8 +33,7 @@
             android:id="@+id/popular_movies_list"
             app:layout_constraintTop_toBottomOf="@id/txt_popular"
             android:layout_margin="8dp"
-            tools:listitem="@layout/movies_item"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"/>
+            tools:listitem="@layout/movies_item"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

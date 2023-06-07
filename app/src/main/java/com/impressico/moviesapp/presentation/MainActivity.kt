@@ -26,9 +26,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(mBinding.toolbar.toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(true)
         viewModel.getPopularMovies()
-        mBinding.btnFetch.setOnClickListener{
-            viewModel.getPopularMovies()
-        }
+
         lifecycleScope.launch(){
         repeatOnLifecycle(state = Lifecycle.State.STARTED){
             viewModel.popularMovieList.collect{resultUIState->

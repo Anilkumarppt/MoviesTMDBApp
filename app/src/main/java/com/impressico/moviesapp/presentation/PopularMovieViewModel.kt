@@ -31,7 +31,14 @@ class PopularMovieViewModel @Inject constructor(private val popularMovieRepo: Po
                             _popularMoviesList.value=UIState.Exception(popularMoviesResult.e.message!!)
                         }
                         is NetworkResult.ApiSuccess ->{
-                            _popularMoviesList.value=UIState.SUCCESS(popularMoviesResult.data)
+                            val result=popularMoviesResult.data
+                            var popularMovieList=result.popularMovies
+                            popularMovieList.map {movie->
+                                movie.poster_path = "https://image.tmdb.org/t/p/w500" + movie.poster_path
+                                movie.backdrop_path = "https://image.tmdb.org/t/p/w500" + movie.backdrop_path
+                            }
+
+                            _popularMoviesList.value=UIState.SUCCESS(popularMovieList)
                         }
                     }
                 }
