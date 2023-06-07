@@ -6,7 +6,7 @@ import com.impressico.moviesapp.data.NetworkConstants.BASE_URL
 import com.impressico.moviesapp.data.NetworkConstants.CONNECT_TIMEOUT
 import com.impressico.moviesapp.data.NetworkConstants.READ_TIMEOUT
 import com.impressico.moviesapp.data.NetworkConstants.WRITE_TIMEOUT
-import com.impressico.moviesapp.data.PopularRemoteDataSource
+import com.impressico.moviesapp.data.remote.PopularRemoteDataSource
 import com.impressico.moviesapp.data.remote.PopularRemoteDataSourceImpl
 import com.impressico.moviesapp.data.remote.RemoteDataSource
 import com.impressico.moviesapp.data.remote.apiservice.TMDBMovieApiService
@@ -61,7 +61,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providesPopularRemoteDataSource(tmdbMovieApiService: TMDBMovieApiService,remoteDataSource:RemoteDataSource):PopularRemoteDataSource=PopularRemoteDataSourceImpl(tmdbMovieApiService, remoteDataSource)
+    fun providesPopularRemoteDataSource(tmdbMovieApiService: TMDBMovieApiService,remoteDataSource:RemoteDataSource): PopularRemoteDataSource =PopularRemoteDataSourceImpl(tmdbMovieApiService, remoteDataSource)
     @Provides
     @Singleton
     fun providePopularRemoteDataSourceImpl(popularRemoteData: PopularRemoteDataSource):PopularMovieRepo=PopularMovieRepoImpl(popularRemoteData)

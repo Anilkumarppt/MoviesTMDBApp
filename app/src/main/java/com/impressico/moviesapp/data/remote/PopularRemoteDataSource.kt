@@ -1,4 +1,4 @@
-package com.impressico.moviesapp.data
+package com.impressico.moviesapp.data.remote
 
 import com.impressico.moviesapp.data.remote.NetworkResult
 import com.impressico.moviesapp.data.remote.model.PopularMovie

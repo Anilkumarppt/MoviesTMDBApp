@@ -1,6 +1,6 @@
 package com.impressico.moviesapp.data.repositoryImpl
 
-import com.impressico.moviesapp.data.PopularRemoteDataSource
+import com.impressico.moviesapp.data.remote.PopularRemoteDataSource
 import com.impressico.moviesapp.data.remote.NetworkResult
 import com.impressico.moviesapp.data.remote.model.PopularMovie
 import com.impressico.moviesapp.domain.repository.PopularMovieRepo
@@ -12,11 +12,8 @@ class PopularMovieRepoImpl @Inject constructor(private val remoteDataSource: Pop
 
 
     override suspend fun getPopularMovies(): Flow<NetworkResult<PopularMovie>> {
-
         return flow {
            emit( remoteDataSource.getPopularMovies(1))
         }
-
-
     }
 }

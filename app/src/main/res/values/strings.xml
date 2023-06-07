@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MoviesApp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="txt_popular">Popular Movies</string>
 </resources>
