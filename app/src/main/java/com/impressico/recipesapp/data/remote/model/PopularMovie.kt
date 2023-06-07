@@ -1,4 +1,4 @@
-package com.impressico.recipesapp.data.remote.data
+package com.impressico.recipesapp.data.remote.model
 
 import com.google.gson.annotations.SerializedName
 

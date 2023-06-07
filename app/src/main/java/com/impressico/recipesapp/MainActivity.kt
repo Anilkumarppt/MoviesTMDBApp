@@ -14,8 +14,5 @@ class MainActivity : AppCompatActivity() {
         setContentView(mBinding.root)
         setSupportActionBar(mBinding.toolbar.toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(true)
-
-
-
     }
 }
