@@ -1,15 +1,13 @@
-package com.impressico.moviesapp.presentation
+package com.impressico.moviesapp.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.impressico.moviesapp.data.remote.NetworkResult
-import com.impressico.moviesapp.data.remote.model.PopularMovie
 import com.impressico.moviesapp.domain.repository.PopularMovieRepo
 import com.impressico.moviesapp.presentation.states.UIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,6 +17,8 @@ class PopularMovieViewModel @Inject constructor(private val popularMovieRepo: Po
     private val _popularMoviesList:MutableStateFlow<UIState> = MutableStateFlow(UIState.Ideal)
     val popularMovieList=_popularMoviesList.asStateFlow()
 
+    private val _popularMovieItem:MutableStateFlow<UIState> = MutableStateFlow(UIState.Ideal)
+    val popularMovieItem=_popularMovieItem.asStateFlow()
     fun getPopularMovies(){
             viewModelScope.launch {
                 _popularMoviesList.value=UIState.Loading
@@ -43,5 +43,24 @@ class PopularMovieViewModel @Inject constructor(private val popularMovieRepo: Po
                     }
                 }
             }
+    }
+    fun getMovieDetails(movieId:Int){
+        viewModelScope.launch {
+            _popularMoviesList.value=UIState.Loading
+            popularMovieRepo.getPopularMovieDetails(movieId).collect{popularMoviesResult->
+                when(popularMoviesResult){
+                    is NetworkResult.ApiError -> {
+                        _popularMovieItem.value=UIState.Error(popularMoviesResult.code,popularMoviesResult.data?.status_message)
+                    }
+                    is NetworkResult.ApiException -> {
+                        _popularMovieItem.value=UIState.Exception(popularMoviesResult.e.message!!)
+                    }
+                    is NetworkResult.ApiSuccess ->{
+                        val result=popularMoviesResult.data
+                        _popularMovieItem.value=UIState.SUCCESS(result)
+                    }
+                }
+            }
+        }
     }
 }

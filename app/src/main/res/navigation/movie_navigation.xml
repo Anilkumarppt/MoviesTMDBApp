@@ -11,7 +11,14 @@
         tools:layout="PopularMoviesList">
         <action
             android:id="@+id/action_to_movie_detail_item"
-            app:destination="@id/movie_details_screen"/>
+            app:destination="@id/movie_details_screen"
+            app:enterAnim="@anim/enter_anim"
+            app:exitAnim="@anim/exit_anim"
+            app:popEnterAnim="@anim/pop_enter_anim"
+            app:popExitAnim="@anim/pop_exit_anim"
+            app:popUpToInclusive="true">
+        </action>
+
     </fragment>
     <fragment
         android:id="@+id/movie_details_screen"
@@ -19,6 +26,16 @@
         tools:layout="MovieDetailsScreen">
         <action
             android:id="@+id/action_to_popular_list"
-            app:destination="@id/popular_movies_list"/>
+            app:destination="@id/popular_movies_list"
+            app:enterAnim="@anim/enter_anim"
+            app:exitAnim="@anim/exit_anim"
+            app:popEnterAnim="@anim/pop_enter_anim"
+            app:popExitAnim="@anim/pop_exit_anim"
+            app:popUpTo="@id/popular_movies_list"
+            app:popUpToInclusive="true"/>
+        <argument
+            android:name="movieId"
+            app:argType="integer"
+             />
     </fragment>
 </navigation>

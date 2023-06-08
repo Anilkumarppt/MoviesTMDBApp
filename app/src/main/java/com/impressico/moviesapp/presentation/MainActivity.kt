@@ -8,6 +8,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.impressico.moviesapp.presentation.states.UIState
+import com.impressico.moviesapp.presentation.viewmodels.PopularMovieViewModel
 
 import com.impressico.recipesapp.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,7 +18,7 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mBinding:ActivityMainBinding
-    private val viewModel:PopularMovieViewModel by viewModels()
+    private val viewModel: PopularMovieViewModel by viewModels()
     private  val TAG = "MainActivity"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

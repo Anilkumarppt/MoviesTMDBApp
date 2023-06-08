@@ -10,7 +10,7 @@ import com.impressico.moviesapp.data.remote.model.PopularMovieItem
 import com.impressico.recipesapp.R
 import com.impressico.recipesapp.databinding.MoviesItemBinding
 
-class PopularMovieListAdapter() : RecyclerView.Adapter<PopularMovieListAdapter.MovieViewHolder>() {
+class PopularMovieListAdapter(private val movieItemClick: (Int) -> Unit) : RecyclerView.Adapter<PopularMovieListAdapter.MovieViewHolder>() {
 
 
     private var popularMovies: List<PopularMovieItem> =
@@ -30,6 +30,9 @@ class PopularMovieListAdapter() : RecyclerView.Adapter<PopularMovieListAdapter.M
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         holder.bindData(popularMovies[position])
+            holder.movieItemBinding.itemParentLayout.setOnClickListener{
+                movieItemClick.invoke(popularMovies[position].id)
+            }
     }
 
     fun updatePopularListItems(popularListItems: List<PopularMovieItem>) {
@@ -37,13 +40,12 @@ class PopularMovieListAdapter() : RecyclerView.Adapter<PopularMovieListAdapter.M
         notifyDataSetChanged()
     }
 
-    class MovieViewHolder(private val movieItemBinding: MoviesItemBinding) :
+    class MovieViewHolder( val movieItemBinding: MoviesItemBinding) :
         ViewHolder(movieItemBinding.root) {
+        init {
+            var mItemBinding:MoviesItemBinding=movieItemBinding
+        }
         fun bindData(popularMovie: PopularMovieItem) {
-            Log.d("Adapter", "bindData: ${popularMovie.poster_path}")
-            //movieItemBinding.popularMovie = popularMovie.title
-            /*movieItemBinding.txtMovieName.text=popularMovie.title
-            movieItemBinding.moviePoster = popularMovie.poster_path*/
             movieItemBinding.movieItem=popularMovie
             movieItemBinding.moviePoster=popularMovie.poster_path
         }
