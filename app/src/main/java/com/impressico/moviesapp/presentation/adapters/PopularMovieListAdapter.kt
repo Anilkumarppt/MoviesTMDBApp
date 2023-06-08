@@ -48,6 +48,7 @@ class PopularMovieListAdapter(private val movieItemClick: (Int) -> Unit) : Recyc
         fun bindData(popularMovie: PopularMovieItem) {
             movieItemBinding.movieItem=popularMovie
             movieItemBinding.moviePoster=popularMovie.poster_path
+
         }
     }
 }

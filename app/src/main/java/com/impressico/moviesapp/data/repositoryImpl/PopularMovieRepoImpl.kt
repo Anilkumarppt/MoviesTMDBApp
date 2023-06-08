@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class PopularMovieRepoImpl @Inject constructor(private val remoteDataSource: PopularRemoteDataSource) :PopularMovieRepo {
+    class PopularMovieRepoImpl @Inject constructor(private val remoteDataSource: PopularRemoteDataSource) :PopularMovieRepo {
 
 
     override suspend fun getPopularMovies(): Flow<NetworkResult<PopularMovie>> {

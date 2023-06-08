@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="popularTVShow"
+            type="String" />
+        <variable
+            name="moviePoster"
+            type="String" />
+        <variable
+            name="tvshowItem"
+            type="com.impressico.moviesapp.data.remote.model.PopularTVShow" />
+    </data>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_parent_layout"
+        android:layout_margin="5dp">
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:cardCornerRadius="10dp"
+            android:background="@color/colorPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/movie_poster_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/poster"
+                    android:scaleType="fitXY"
+
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@tools:sample/avatars" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        tools:ignore="UselessParent">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:orientation="horizontal">
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/release_date"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:text="@{}"
+                                android:layout_weight="1"
+                                android:shadowColor="#000000"
+                                android:textColor="@android:color/white"
+                                android:textSize="11dp"
+                                android:shadowDx="1.5"
+                                android:shadowDy="1.3"
+                                android:shadowRadius="1.6"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                tools:text="@tools:sample/date/hhmmss"
+                                tools:ignore="SpUsage" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:layout_marginStart="10dp"
+                                android:layout_gravity="end"
+                                android:orientation="horizontal"
+                                tools:ignore="UseCompoundDrawables">
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/vote_average"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:shadowColor="#000000"
+
+                                    android:textColor="@color/yellow"
+                                    android:textSize="12dp"
+                                    android:shadowDx="1.5"
+                                    android:shadowDy="1.3"
+                                    android:shadowRadius="1.6"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    tools:text="8.2"
+                                    tools:ignore="SpUsage" />
+
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:layout_width="11dp"
+                                    android:layout_height="11dp"
+                                    android:layout_marginStart="3dp"
+                                    android:src="@drawable/ic_star"
+                                    app:tint="@color/yellow"
+                                    tools:ignore="ContentDescription" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tv_show_title"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:layout_height="0dp"
+                            android:textColor="#ffffff"
+                            android:textSize="15sp"
+                            android:layout_marginTop="5dp"
+                            android:textStyle="bold"
+                            android:maxLines="1"
+                            android:ellipsize="end"
+                            android:shadowColor="#000000"
+                            android:shadowDx="1.5"
+                            android:shadowDy="1.3"
+                            android:shadowRadius="1.6"
+                            tools:text="My Movie Title" />
+
+                    </LinearLayout>
+
+
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </RelativeLayout>
+
+</layout>

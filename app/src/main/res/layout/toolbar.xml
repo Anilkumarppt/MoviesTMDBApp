@@ -10,7 +10,6 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     android:background="@color/purple_200"
-    app:title="RecipesList"
     app:titleTextColor="@color/yellow"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 </androidx.appcompat.widget.Toolbar>

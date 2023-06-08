@@ -25,5 +25,5 @@ interface TMDBMovieApiService {
     suspend fun getPopularTVShows(@Query("page") page:Int):Response<PopularTVResult>
 
     @GET(NetworkConstants.GET_POPULAR_TV_DETAILS)
-    suspend fun getPopularTVDetails(@Path("series_id") seriesId:String):Response<PopularTVItem>
+    suspend fun getPopularTVDetails(@Path("series_id") seriesId:Int):Response<PopularTVItem>
 }

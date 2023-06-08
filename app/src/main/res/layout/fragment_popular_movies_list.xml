@@ -63,16 +63,18 @@
             android:textStyle="bold"
             android:textSize="24sp"
             style="@style/TextAppearance.AppCompat.Body1"
-            android:text="@string/latest_movies" />
+            android:text="@string/latest_tv_shows" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/latest_movie_list"
+            android:id="@+id/latest_tv_show_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/txt_toprated"
-            android:layout_margin="8dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:orientation="horizontal" />
+            tools:listitem="@layout/tvshow_item"
+            android:layout_marginTop="8dp"
+            android:clipToPadding="false"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

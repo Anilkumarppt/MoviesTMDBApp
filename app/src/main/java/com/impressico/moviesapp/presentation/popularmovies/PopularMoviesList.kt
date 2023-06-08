@@ -14,9 +14,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.impressico.moviesapp.data.remote.model.PopularMovieItem
+import com.impressico.moviesapp.data.remote.model.PopularTVResult
+import com.impressico.moviesapp.data.remote.model.PopularTVShow
 import com.impressico.moviesapp.presentation.viewmodels.PopularMovieViewModel
 import com.impressico.moviesapp.presentation.adapters.PopularMovieListAdapter
+import com.impressico.moviesapp.presentation.adapters.PopularTVShowsListAdapter
 import com.impressico.moviesapp.presentation.states.UIState
+import com.impressico.moviesapp.presentation.viewmodels.PopularTVShowViewModel
 import com.impressico.recipesapp.databinding.FragmentPopularMoviesListBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -27,8 +31,13 @@ class PopularMoviesList : Fragment() {
 
     private lateinit var mBinding: FragmentPopularMoviesListBinding
     private val viewModel: PopularMovieViewModel by viewModels()
+    
+    private val tvShowViewModel:PopularTVShowViewModel by viewModels()
+    
     private val TAG = "PopularMoviesList"
     private lateinit var mAdapter: PopularMovieListAdapter
+
+    private lateinit var tvShowListAdapter: PopularTVShowsListAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -38,12 +47,12 @@ class PopularMoviesList : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         mBinding = FragmentPopularMoviesListBinding.inflate(inflater, container, false)
-        /* val layoutManager = LinearLayoutManager(requireContext(),  RecyclerView.HORIZONTAL, false)
-         mBinding.popularMoviesList.layoutManager=layoutManager*/
         mAdapter= PopularMovieListAdapter { movieId ->
             val action = PopularMoviesListDirections.actionToMovieDetailItem(movieId)
             findNavController().navigate(action)
-
+        }
+        tvShowListAdapter= PopularTVShowsListAdapter { tvShowId->
+            Log.d(TAG, "onCreateView: TV Show id $tvShowId")
         }
         mBinding.popularMoviesList.apply {
             setHasFixedSize(true)
@@ -55,7 +64,7 @@ class PopularMoviesList : Fragment() {
             )
             adapter = mAdapter
         }
-        mBinding.latestMovieList.apply {
+        mBinding.latestTvShowList.apply {
             setHasFixedSize(true)
             layoutManager = GridLayoutManager(
                 context,
@@ -63,7 +72,7 @@ class PopularMoviesList : Fragment() {
                 RecyclerView.HORIZONTAL,
                 false
             )
-            adapter = mAdapter
+            adapter = tvShowListAdapter
         }
 
 
@@ -74,6 +83,12 @@ class PopularMoviesList : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getPopularMovies()
+        tvShowViewModel.getTVShowList()
+        collectMoviesList()
+        collectTVShowsList()
+    }
+
+    private fun collectMoviesList() {
         viewLifecycleOwner.lifecycleScope.launch() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.popularMovieList.collect {
@@ -101,6 +116,40 @@ class PopularMoviesList : Fragment() {
                 }
             }
         }
+    }
+    private fun collectTVShowsList(){
+        viewLifecycleOwner.lifecycleScope.launch() {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                tvShowViewModel.tvShowList.collect {resultUIState->
+
+                        when (resultUIState) {
+                            is UIState.Error -> {
+                                Log.e(TAG, "onCreate: error")
+                            }
+                            is UIState.Exception -> {
+                                Log.e(TAG, "onCreate: Exception")
+                            }
+                            UIState.Ideal -> {}
+                            UIState.Loading -> {}
+                            UIState.NoInternet -> {}
+                            is UIState.SUCCESS -> {
+                                try {
+                                    val result = resultUIState.data as PopularTVResult
+                                    Log.d(TAG, "collectTVShowsList: Result TV Shows ${result.results.toString()}")
+                                    bindTVShowData(result.results)
+                                    //bindData(result)
+                                } catch (e: Exception) {
+                                    Log.e(TAG, "onViewCreated: ${e.message}")
+                                }
+                            }
+                        }
+                }
+            }
+        }
+    }
+
+    private fun bindTVShowData(result: List<PopularTVShow>) {
+            tvShowListAdapter.updateTVShowList(result)
     }
 
     private fun bindData(popularMovies: List<PopularMovieItem>) {

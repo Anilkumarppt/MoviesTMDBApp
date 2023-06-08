@@ -11,7 +11,9 @@ import com.impressico.moviesapp.data.remote.PopularRemoteDataSourceImpl
 import com.impressico.moviesapp.data.remote.RemoteDataSource
 import com.impressico.moviesapp.data.remote.apiservice.TMDBMovieApiService
 import com.impressico.moviesapp.data.repositoryImpl.PopularMovieRepoImpl
+import com.impressico.moviesapp.data.repositoryImpl.PopularTVShowRepoImpl
 import com.impressico.moviesapp.domain.repository.PopularMovieRepo
+import com.impressico.moviesapp.domain.repository.PopularTVShowRepo
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,6 +22,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.POST
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -64,5 +67,9 @@ object NetworkModule {
     fun providesPopularRemoteDataSource(tmdbMovieApiService: TMDBMovieApiService,remoteDataSource:RemoteDataSource): PopularRemoteDataSource =PopularRemoteDataSourceImpl(tmdbMovieApiService, remoteDataSource)
     @Provides
     @Singleton
-    fun providePopularRemoteDataSourceImpl(popularRemoteData: PopularRemoteDataSource):PopularMovieRepo=PopularMovieRepoImpl(popularRemoteData)
+    fun providePopularMoviesRepo(popularRemoteData: PopularRemoteDataSource):PopularMovieRepo=PopularMovieRepoImpl(popularRemoteData)
+
+    @Provides
+    @Singleton
+    fun providePopularTVShow(popularRemoteData: PopularRemoteDataSource):PopularTVShowRepo=PopularTVShowRepoImpl(popularRemoteData)
 }

@@ -11,6 +11,7 @@
     <androidx.core.widget.NestedScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+        android:background="@drawable/bg"
     android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -104,6 +105,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:progressTint="@color/yellow"
             app:layout_constraintEnd_toEndOf="@+id/movie_poster_card"
             app:layout_constraintStart_toStartOf="@+id/movie_poster_card"
             app:layout_constraintTop_toBottomOf="@+id/movie_poster_card" />
