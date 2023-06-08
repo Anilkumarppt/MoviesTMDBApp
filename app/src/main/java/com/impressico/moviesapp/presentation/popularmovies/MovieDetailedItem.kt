@@ -97,46 +97,13 @@ class MovieDetailedItem : Fragment() {
     }
 
     private fun bindData(movie: Movie) {
-        setBackgroundPathImg(movie)
+        //setBackgroundPathImg(movie)
         val backdrop= NetworkConstants.BACKGROUND_BASE_URL+movie.backdrop_path
         Log.d(TAG, "bindData: $backdrop")
         val posterURL=NetworkConstants.POSTER_BASE_URL+movie.poster_path
         loadImageFromUrl(posterURL,mBinding.moviePoster)
+        loadImageFromUrl(backdrop,mBinding.movieBackdrop)
         mBinding.movieRating.rating=movie.vote_average.toFloat()/2
-    }
-    private fun setBackgroundPathImg(movie: Movie){
-        val backdrop= NetworkConstants.BACKGROUND_BASE_URL+movie.backdrop_path
-        val requestOptions = RequestOptions()
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .error(R.drawable.error_image)
-        Glide.with(this)
-            .load(backdrop)
-            .apply(requestOptions)
-            .listener(object :RequestListener<Drawable>{
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any?,
-                    target: Target<Drawable>?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    Log.e(TAG, "onLoadFailed: ${e?.message}", )
-                    return true
-                }
-
-                override fun onResourceReady(
-                    resource: Drawable?,
-                    model: Any?,
-                    target: Target<Drawable>?,
-                    dataSource: DataSource?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    Log.d(TAG, "onResourceReady: ")
-                    return true
-                }
-
-            })
-            .into(mBinding.movieBackdrop)
-
     }
     private fun loadImageFromUrl(url:String, view:ImageView){
         val requestOptions = RequestOptions()
