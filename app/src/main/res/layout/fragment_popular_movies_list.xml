@@ -2,17 +2,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_orange_gradient"
+    android:background="@drawable/bg"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.impressico.moviesapp.presentation.popularmovies.PopularMoviesList">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:id="@+id/layout_popular_movies"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHeight_percent="0.5">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"
@@ -21,7 +21,7 @@
             android:id="@+id/txt_popular"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:textColor="@color/purple_200"
+            android:textColor="@color/white"
             android:textStyle="bold"
             android:textSize="24sp"
             style="@style/TextAppearance.AppCompat.Body1"
@@ -31,10 +31,48 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/popular_movies_list"
+            android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@id/txt_popular"
-            android:layout_margin="8dp"
+            android:layout_marginTop="8dp"
+            android:clipToPadding="false"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             tools:listitem="@layout/movies_item"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent="0.5" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/latest_movie_list_layout"
+        app:layout_constraintHeight_percent="0.5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:id="@+id/txt_toprated"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:text="@string/latest_movies" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/latest_movie_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/txt_toprated"
+            android:layout_margin="8dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="horizontal" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

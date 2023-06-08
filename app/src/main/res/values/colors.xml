@@ -10,4 +10,8 @@
 
     <color name="yellow">#FFCC00</color>
     <color name="transparent">#00FFFFFF</color>
+
+    <color name="colorPrimary">#211F45</color>
+    <color name="colorPrimaryDark">#141325</color>
+    <color name="colorAccent">#282DDB</color>
 </resources>

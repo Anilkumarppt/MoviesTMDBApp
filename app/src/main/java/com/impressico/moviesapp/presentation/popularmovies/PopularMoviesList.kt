@@ -11,7 +11,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.impressico.moviesapp.data.remote.model.PopularMovie
 import com.impressico.moviesapp.data.remote.model.PopularMovieItem
 import com.impressico.moviesapp.presentation.PopularMovieViewModel
@@ -19,6 +21,7 @@ import com.impressico.moviesapp.presentation.adapters.PopularMovieListAdapter
 import com.impressico.moviesapp.presentation.states.UIState
 import com.impressico.recipesapp.R
 import com.impressico.recipesapp.databinding.FragmentPopularMoviesListBinding
+
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -32,7 +35,7 @@ import kotlinx.coroutines.launch
 class PopularMoviesList : Fragment() {
     // TODO: Rename and change types of parameters
 
-    private lateinit var mBinding:FragmentPopularMoviesListBinding
+    private lateinit var mBinding: FragmentPopularMoviesListBinding
     private val viewModel:PopularMovieViewModel by viewModels()
     private  val TAG = "PopularMoviesList"
     private  var mAdapter:PopularMovieListAdapter = PopularMovieListAdapter()
@@ -45,8 +48,29 @@ class PopularMoviesList : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         mBinding= FragmentPopularMoviesListBinding.inflate(inflater, container, false)
-        mBinding.popularMoviesList.layoutManager=LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
-        mBinding.popularMoviesList.adapter=mAdapter
+       /* val layoutManager = LinearLayoutManager(requireContext(),  RecyclerView.HORIZONTAL, false)
+        mBinding.popularMoviesList.layoutManager=layoutManager*/
+        mBinding.popularMoviesList.apply {
+                setHasFixedSize(true)
+             layoutManager = GridLayoutManager(
+                context,
+                1,
+                RecyclerView.HORIZONTAL,
+                false
+            )
+                adapter=mAdapter
+        }
+        mBinding.latestMovieList.apply {
+            setHasFixedSize(true)
+            layoutManager = GridLayoutManager(
+                context,
+                1,
+                RecyclerView.HORIZONTAL,
+                false
+            )
+            adapter=mAdapter
+        }
+
 
         // Inflate the layout for this fragment
         return mBinding.root
