@@ -26,18 +26,5 @@ object DataBindingUtil {
                 .into(this)
     }
 
-    @JvmStatic
-    @BindingAdapter("backdropUrl")
-    fun ImageView.loadBackGroundImage(backdropUrl:String){
-        val requestOptions = RequestOptions()
-            .placeholder(R.drawable.ic_launcher_background)
-            .error(R.drawable.ic_launcher_background)
-            val url=NetworkConstants.BACKGROUND_BASE_URL+backdropUrl
-        Glide.with(this.context)
-            .applyDefaultRequestOptions(requestOptions).
-            load(url).error(R.drawable.error_image).
-            diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-            .into(this)
-    }
 
 }
