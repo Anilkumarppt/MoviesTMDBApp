@@ -19,6 +19,7 @@ import com.impressico.moviesapp.data.remote.model.PopularTVShow
 import com.impressico.moviesapp.domain.model.PopularListDto
 import com.impressico.moviesapp.presentation.adapters.PopularMovieListAdapter
 import com.impressico.moviesapp.presentation.states.UIState
+import com.impressico.moviesapp.presentation.util.customSnackBar
 import com.impressico.moviesapp.presentation.viewmodels.PopularMovieViewModel
 import com.impressico.moviesapp.presentation.viewmodels.PopularTVShowViewModel
 import com.impressico.recipesapp.databinding.FragmentPopularMoviesListBinding
@@ -27,7 +28,7 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PopularMoviesList : Fragment() {
-    // TODO: Rename and change types of parameters
+
 
     private lateinit var mBinding: FragmentPopularMoviesListBinding
     private val viewModel: PopularMovieViewModel by viewModels()
@@ -45,11 +46,13 @@ class PopularMoviesList : Fragment() {
     ): View? {
         mBinding = FragmentPopularMoviesListBinding.inflate(inflater, container, false)
         mAdapter = PopularMovieListAdapter { movieId ->
-            val action = PopularMoviesListDirections.actionToMovieDetailItem(movieId)
+            val action = PopularMoviesListDirections.actionToMovieDetailItem(movieId,true)
             findNavController().navigate(action)
         }
         tvShowListAdapter = PopularMovieListAdapter { tvShowId ->
             Log.d(TAG, "onCreateView: TV Show id $tvShowId")
+            val action = PopularMoviesListDirections.actionToMovieDetailItem(tvShowId,false)
+            findNavController().navigate(action)
         }
         mBinding.popularMoviesList.apply {
             setHasFixedSize(true)
@@ -92,16 +95,31 @@ class PopularMoviesList : Fragment() {
                     viewModel.popularMovieList.collect { resultUIState ->
                         when (resultUIState) {
                             is UIState.Error -> {
+                                mBinding.progressCircular.customProgressbar.visibility = View.GONE
+                                customSnackBar(mBinding.root, "${resultUIState.errorMsg}", true)
                                 Log.e(TAG, "onCreate: error")
                             }
                             is UIState.Exception -> {
+                                customSnackBar(mBinding.root, "${resultUIState.message}", true)
                                 Log.e(TAG, "onCreate: Exception")
                             }
                             UIState.Ideal -> {}
-                            UIState.Loading -> {}
-                            UIState.NoInternet -> {}
+                            UIState.Loading -> {
+                                mBinding.progressCircular.customProgressbar.visibility =
+                                    View.VISIBLE
+                            }
+                            UIState.NoInternet -> {
+                                customSnackBar(
+                                    mBinding.root,
+                                    "No Internet Connection Available",
+                                    true
+                                )
+                            }
                             is UIState.SUCCESS -> {
                                 try {
+                                    //customSnackBar(mBinding.root,"Success",false)
+                                    mBinding.progressCircular.customProgressbar.visibility =
+                                        View.GONE
                                     val result = resultUIState.data as List<PopularMovieItem>
                                     //bindData(result)
                                     toPopularListDto(result)
@@ -130,20 +148,32 @@ class PopularMoviesList : Fragment() {
 
                     when (resultUIState) {
                         is UIState.Error -> {
+                            mBinding.progressCircular2
+                                .customProgressbar.visibility = View.GONE
+                            customSnackBar(mBinding.root, "${resultUIState.errorMsg}", true)
                             Log.e(TAG, "onCreate: error")
                         }
                         is UIState.Exception -> {
+                            customSnackBar(mBinding.root, resultUIState.message, true)
+                            mBinding.progressCircular2
+                                .customProgressbar.visibility = View.GONE
                             Log.e(TAG, "onCreate: Exception")
                         }
                         UIState.Ideal -> {}
-                        UIState.Loading -> {}
-                        UIState.NoInternet -> {}
+                        UIState.Loading -> {
+                            mBinding.progressCircular2
+                                .customProgressbar.visibility = View.VISIBLE
+                        }
+
+                        UIState.NoInternet -> {
+                            customSnackBar(mBinding.root, "No Internet Connection Available", true)
+                        }
                         is UIState.SUCCESS -> {
                             try {
+                                mBinding.progressCircular2
+                                    .customProgressbar.visibility = View.GONE
                                 val result = resultUIState.data as PopularTVResult
-
                                 bindTVShowData(result.results)
-                                //bindData(result)
                             } catch (e: Exception) {
                                 Log.e(TAG, "onViewCreated: ${e.message}")
                             }

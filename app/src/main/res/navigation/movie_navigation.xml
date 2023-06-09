@@ -37,5 +37,7 @@
             android:name="movieId"
             app:argType="integer"
              />
+        <argument android:name="detailType"
+            app:argType="boolean"/>
     </fragment>
 </navigation>

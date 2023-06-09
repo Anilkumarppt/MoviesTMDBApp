@@ -19,6 +19,6 @@ data class PopularTVShow(
     val vote_count: Int
 ){
     fun toPopularListDto(): PopularListDto {
-        return PopularListDto(name,id,backdrop_path,poster_path,first_air_date,vote_average)
+        return PopularListDto(name,id,backdrop_path,poster_path,first_air_date,vote_average,overview)
     }
 }

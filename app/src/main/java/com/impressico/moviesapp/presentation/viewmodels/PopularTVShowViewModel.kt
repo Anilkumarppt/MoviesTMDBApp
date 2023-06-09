@@ -41,24 +41,23 @@ class PopularTVShowViewModel @Inject constructor(private val popularTVShowRepo: 
                   }
               }
           }
-
-          fun getTvShowDetail(tvShowId:Int){
-              viewModelScope.launch {
-                  _tvShowDetail.value=UIState.Loading
-                  popularTVShowRepo.getPopularTVShowDetails(tvShowId).collect{tvShowDetail->
-                      when(tvShowDetail){
-                          is NetworkResult.ApiError -> {
-                              _tvShowDetail.value=UIState.Error(tvShowDetail.code,tvShowDetail.data?.status_message)
-                          }
-                          is NetworkResult.ApiException -> {
-                              _tvShowDetail.value=UIState.Exception(tvShowDetail.e.message!!)
-                          }
-                          is NetworkResult.ApiSuccess -> {
-                              _tvShowDetail.value=UIState.SUCCESS(tvShowDetail.data)
-                          }
-                      }
-                  }
-              }
-          }
       }
+    fun getTvShowDetail(tvShowId:Int){
+        viewModelScope.launch {
+            _tvShowDetail.value=UIState.Loading
+            popularTVShowRepo.getPopularTVShowDetails(tvShowId).collect{tvShowDetail->
+                when(tvShowDetail){
+                    is NetworkResult.ApiError -> {
+                        _tvShowDetail.value=UIState.Error(tvShowDetail.code,tvShowDetail.data?.status_message)
+                    }
+                    is NetworkResult.ApiException -> {
+                        _tvShowDetail.value=UIState.Exception(tvShowDetail.e.message!!)
+                    }
+                    is NetworkResult.ApiSuccess -> {
+                        _tvShowDetail.value=UIState.SUCCESS(tvShowDetail.data)
+                    }
+                }
+            }
+        }
+    }
 }

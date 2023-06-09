@@ -20,6 +20,6 @@ data class PopularMovieItem(
 )
 {
     fun toPopularListDto(): PopularListDto {
-        return PopularListDto(title,id,backdrop_path,poster_path,release_date,vote_average)
+        return PopularListDto(title,id,backdrop_path,poster_path,release_date,vote_average,overview)
     }
 }

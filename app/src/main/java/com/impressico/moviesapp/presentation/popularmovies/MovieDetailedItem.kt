@@ -1,7 +1,6 @@
 package com.impressico.moviesapp.presentation.popularmovies
 
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,16 +14,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.Target
 import com.impressico.moviesapp.data.NetworkConstants
 import com.impressico.moviesapp.data.remote.model.Movie
+import com.impressico.moviesapp.data.remote.model.PopularMovieItem
+import com.impressico.moviesapp.data.remote.model.PopularTVItem
+import com.impressico.moviesapp.data.remote.model.PopularTVShow
+import com.impressico.moviesapp.domain.model.PopularListDto
 import com.impressico.moviesapp.presentation.states.UIState
 import com.impressico.moviesapp.presentation.viewmodels.PopularMovieViewModel
+import com.impressico.moviesapp.presentation.viewmodels.PopularTVShowViewModel
 import com.impressico.recipesapp.R
 import com.impressico.recipesapp.databinding.FragmentMovieDetailedItemBinding
 
@@ -47,9 +46,12 @@ class MovieDetailedItem : Fragment() {
     private val args:MovieDetailedItemArgs by navArgs()
     private  val TAG = "MovieDetailedItem"
     private val viewModel:PopularMovieViewModel by viewModels()
+    private val tvShowViewModel:PopularTVShowViewModel by viewModels()
+    private  var isMovieDetail:Boolean=false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         movieId=args.movieId
+        isMovieDetail=args.detailType
     }
 
     override fun onCreateView(
@@ -63,7 +65,52 @@ class MovieDetailedItem : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getMovieDetails(movieId)
+        if(isMovieDetail) {
+            viewModel.getMovieDetails(movieId)
+            collectMovieData()
+        }
+        else {
+            tvShowViewModel.getTvShowDetail(movieId)
+            Log.d(TAG, "onViewCreated: TVShow id $movieId")
+            collectTVShowData()
+        }
+
+    }
+
+    private fun collectTVShowData() {
+        viewLifecycleOwner.lifecycleScope.launch(){
+            repeatOnLifecycle(state = Lifecycle.State.STARTED){
+                tvShowViewModel.tvShowDetail.collect{tvShow->
+                    when(tvShow){
+                        is UIState.Error -> {
+                            Log.e(TAG, "onViewCreated: Error ${tvShow.errorMsg}")
+                        }
+                        is UIState.Exception -> {
+                            Log.e(TAG, "onViewCreated: ${tvShow.message}")
+                        }
+                        UIState.Ideal -> {}
+                        UIState.Loading -> {}
+                        UIState.NoInternet ->{}
+                        is UIState.SUCCESS -> {
+                            try {
+                                val tvShowData: PopularTVItem= tvShow.data as PopularTVItem
+                                //mBinding.movieItem=movieData
+                                bindData(tvShowData.toPopularListDto())
+                            }
+                            catch (exception:Exception){
+                                Log.e(TAG, "onViewCreated: ${exception.toString()}")
+                            }
+
+                            Log.d(TAG, "onViewCreated: Success ${tvShow.data.toString()}")
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
+    private fun collectMovieData(){
         viewLifecycleOwner.lifecycleScope.launch(){
             repeatOnLifecycle(state = Lifecycle.State.STARTED){
                 viewModel.popularMovieItem.collect{movie->
@@ -80,8 +127,8 @@ class MovieDetailedItem : Fragment() {
                         is UIState.SUCCESS -> {
                             try {
                                 val movieData: Movie= movie.data as Movie
-                                mBinding.movieItem=movieData
-                                bindData(movieData)
+                                //mBinding.movieItem=movieData
+                                bindData(movieData.toPopularListDto())
                             }
                             catch (exception:Exception){
                                 Log.e(TAG, "onViewCreated: ${exception.toString()}")
@@ -95,8 +142,7 @@ class MovieDetailedItem : Fragment() {
             }
         }
     }
-
-    private fun bindData(movie: Movie) {
+    private fun bindData(movie: PopularListDto) {
         //setBackgroundPathImg(movie)
         val backdrop= NetworkConstants.BACKGROUND_BASE_URL+movie.backdrop_path
         Log.d(TAG, "bindData: $backdrop")
@@ -104,6 +150,12 @@ class MovieDetailedItem : Fragment() {
         loadImageFromUrl(posterURL,mBinding.moviePoster)
         loadImageFromUrl(backdrop,mBinding.movieBackdrop)
         mBinding.movieRating.rating=movie.vote_average.toFloat()/2
+        if(movie.overview.isNullOrBlank()){
+            mBinding.movieOverview.text="No OverView Available"
+        }
+        else
+            mBinding.movieOverview.text=movie.overview
+        Log.d(TAG, "bindData: ${movie.overview}")
     }
     private fun loadImageFromUrl(url:String, view:ImageView){
         val requestOptions = RequestOptions()

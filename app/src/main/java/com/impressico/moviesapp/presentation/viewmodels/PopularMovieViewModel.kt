@@ -6,6 +6,7 @@ import com.impressico.moviesapp.data.remote.NetworkResult
 import com.impressico.moviesapp.domain.repository.PopularMovieRepo
 import com.impressico.moviesapp.presentation.states.UIState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch

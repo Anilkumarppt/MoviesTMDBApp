@@ -1,5 +1,7 @@
 package com.impressico.moviesapp.data.remote.model
 
+import com.impressico.moviesapp.domain.model.PopularListDto
+
 data class PopularTVItem(
     val adult: Boolean,
     val backdrop_path: String,
@@ -22,5 +24,10 @@ data class PopularTVItem(
     val tagline: String,
     val type: String,
     val vote_average: Double,
-    val vote_count: Int
-)
+    val vote_count: Int,
+    val name:String
+){
+    fun toPopularListDto(): PopularListDto {
+        return PopularListDto(name,id,backdrop_path,poster_path,first_air_date,vote_average,overview)
+    }
+}
