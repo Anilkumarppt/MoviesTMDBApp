@@ -16,10 +16,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.impressico.moviesapp.data.remote.model.PopularMovieItem
 import com.impressico.moviesapp.data.remote.model.PopularTVResult
 import com.impressico.moviesapp.data.remote.model.PopularTVShow
-import com.impressico.moviesapp.presentation.viewmodels.PopularMovieViewModel
+import com.impressico.moviesapp.domain.model.PopularListDto
 import com.impressico.moviesapp.presentation.adapters.PopularMovieListAdapter
-import com.impressico.moviesapp.presentation.adapters.PopularTVShowsListAdapter
 import com.impressico.moviesapp.presentation.states.UIState
+import com.impressico.moviesapp.presentation.viewmodels.PopularMovieViewModel
 import com.impressico.moviesapp.presentation.viewmodels.PopularTVShowViewModel
 import com.impressico.recipesapp.databinding.FragmentPopularMoviesListBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,27 +31,24 @@ class PopularMoviesList : Fragment() {
 
     private lateinit var mBinding: FragmentPopularMoviesListBinding
     private val viewModel: PopularMovieViewModel by viewModels()
-    
-    private val tvShowViewModel:PopularTVShowViewModel by viewModels()
-    
+
+    private val tvShowViewModel: PopularTVShowViewModel by viewModels()
+
     private val TAG = "PopularMoviesList"
     private lateinit var mAdapter: PopularMovieListAdapter
 
-    private lateinit var tvShowListAdapter: PopularTVShowsListAdapter
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private lateinit var tvShowListAdapter: PopularMovieListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         mBinding = FragmentPopularMoviesListBinding.inflate(inflater, container, false)
-        mAdapter= PopularMovieListAdapter { movieId ->
+        mAdapter = PopularMovieListAdapter { movieId ->
             val action = PopularMoviesListDirections.actionToMovieDetailItem(movieId)
             findNavController().navigate(action)
         }
-        tvShowListAdapter= PopularTVShowsListAdapter { tvShowId->
+        tvShowListAdapter = PopularMovieListAdapter { tvShowId ->
             Log.d(TAG, "onCreateView: TV Show id $tvShowId")
         }
         mBinding.popularMoviesList.apply {
@@ -89,7 +86,7 @@ class PopularMoviesList : Fragment() {
     }
 
     private fun collectMoviesList() {
-        viewLifecycleOwner.lifecycleScope.launch() {
+        viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.popularMovieList.collect {
                     viewModel.popularMovieList.collect { resultUIState ->
@@ -106,7 +103,8 @@ class PopularMoviesList : Fragment() {
                             is UIState.SUCCESS -> {
                                 try {
                                     val result = resultUIState.data as List<PopularMovieItem>
-                                    bindData(result)
+                                    //bindData(result)
+                                    toPopularListDto(result)
                                 } catch (e: Exception) {
                                     Log.e(TAG, "onViewCreated: ${e.message}")
                                 }
@@ -117,42 +115,52 @@ class PopularMoviesList : Fragment() {
             }
         }
     }
-    private fun collectTVShowsList(){
-        viewLifecycleOwner.lifecycleScope.launch() {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                tvShowViewModel.tvShowList.collect {resultUIState->
 
-                        when (resultUIState) {
-                            is UIState.Error -> {
-                                Log.e(TAG, "onCreate: error")
-                            }
-                            is UIState.Exception -> {
-                                Log.e(TAG, "onCreate: Exception")
-                            }
-                            UIState.Ideal -> {}
-                            UIState.Loading -> {}
-                            UIState.NoInternet -> {}
-                            is UIState.SUCCESS -> {
-                                try {
-                                    val result = resultUIState.data as PopularTVResult
-                                    Log.d(TAG, "collectTVShowsList: Result TV Shows ${result.results.toString()}")
-                                    bindTVShowData(result.results)
-                                    //bindData(result)
-                                } catch (e: Exception) {
-                                    Log.e(TAG, "onViewCreated: ${e.message}")
-                                }
+    private fun toPopularListDto(result: List<PopularMovieItem>) {
+        val popularListDto: List<PopularListDto> = result.map { it.toPopularListDto() }
+        Log.d(TAG, "toPopularListDto: DTO List $popularListDto")
+        mAdapter.updatePopularListItems(popularListDto)
+    }
+
+
+    private fun collectTVShowsList() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                tvShowViewModel.tvShowList.collect { resultUIState ->
+
+                    when (resultUIState) {
+                        is UIState.Error -> {
+                            Log.e(TAG, "onCreate: error")
+                        }
+                        is UIState.Exception -> {
+                            Log.e(TAG, "onCreate: Exception")
+                        }
+                        UIState.Ideal -> {}
+                        UIState.Loading -> {}
+                        UIState.NoInternet -> {}
+                        is UIState.SUCCESS -> {
+                            try {
+                                val result = resultUIState.data as PopularTVResult
+
+                                bindTVShowData(result.results)
+                                //bindData(result)
+                            } catch (e: Exception) {
+                                Log.e(TAG, "onViewCreated: ${e.message}")
                             }
                         }
+                    }
                 }
             }
         }
     }
 
     private fun bindTVShowData(result: List<PopularTVShow>) {
-            tvShowListAdapter.updateTVShowList(result)
+        val popularListDto: List<PopularListDto> = result.map { it.toPopularListDto() }
+        Log.d(TAG, "collectTVShowsList: Result TV Shows $popularListDto")
+        tvShowListAdapter.updatePopularListItems(popularListDto)
     }
 
     private fun bindData(popularMovies: List<PopularMovieItem>) {
-        mAdapter.updatePopularListItems(popularMovies)
+        //mAdapter.updatePopularListItems(popularMovies)
     }
 }

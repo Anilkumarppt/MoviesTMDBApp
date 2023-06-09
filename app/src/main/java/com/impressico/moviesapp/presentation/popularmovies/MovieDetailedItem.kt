@@ -112,6 +112,7 @@ class MovieDetailedItem : Fragment() {
         Glide.with(this)
             .applyDefaultRequestOptions(requestOptions).
             load(url).error(R.drawable.error_image)
+            .centerCrop()
             .into(view)
 
     }
