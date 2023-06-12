@@ -7,4 +7,5 @@
     <string name="latest_tv_shows">Latest TV Shows</string>
     <string name="poster">poster</string>
     <string name="txt_overview">OverView</string>
+    <string name="title_activity_compose">ComposeActivity</string>
 </resources>

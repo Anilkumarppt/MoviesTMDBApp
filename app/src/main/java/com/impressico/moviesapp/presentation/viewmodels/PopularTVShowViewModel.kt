@@ -5,12 +5,14 @@ import android.provider.Contacts.Intents.UI
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.impressico.moviesapp.data.NetworkConstants
 import com.impressico.moviesapp.data.remote.NetworkResult
 
 import com.impressico.moviesapp.domain.repository.PopularTVShowRepo
 import com.impressico.moviesapp.presentation.states.UIState
 import com.impressico.moviesapp.presentation.util.NetworkCheck
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
@@ -32,8 +34,10 @@ class PopularTVShowViewModel @Inject constructor(private val popularTVShowRepo: 
       @RequiresApi(Build.VERSION_CODES.M)
       fun getTVShowList(){
           if(networkCheck.isInternetAvailable()) {
+
               viewModelScope.launch {
                   _tvShowList.value = UIState.Loading
+                  delay(2000)
                   popularTVShowRepo.getPopularTVShows().collect { tvShowList ->
                       when (tvShowList) {
                           is NetworkResult.ApiError -> {
@@ -44,7 +48,15 @@ class PopularTVShowViewModel @Inject constructor(private val popularTVShowRepo: 
                               _tvShowList.value = UIState.Exception(tvShowList.e.message!!)
                           }
                           is NetworkResult.ApiSuccess -> {
-                              _tvShowList.value = UIState.SUCCESS(tvShowList.data)
+                              var result=tvShowList.data
+                              val popularTVShows=result.results
+                              popularTVShows.map {tvShow->
+                                  tvShow.poster_path =
+                                      NetworkConstants.BACKGROUND_BASE_URL + tvShow.poster_path
+                                  tvShow.backdrop_path =
+                                      NetworkConstants.BACKGROUND_BASE_URL+ tvShow.backdrop_path
+                              }
+                              _tvShowList.value = UIState.SUCCESS(popularTVShows)
                           }
                       }
                   }

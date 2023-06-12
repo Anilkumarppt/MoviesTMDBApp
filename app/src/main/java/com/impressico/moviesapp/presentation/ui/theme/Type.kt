@@ -1,4 +1,4 @@
-package com.anil.tmdbpopularmovies.ui.theme
+package com.impressico.moviesapp.presentation.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
