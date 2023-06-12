@@ -37,7 +37,7 @@ class PopularTVShowViewModel @Inject constructor(private val popularTVShowRepo: 
 
               viewModelScope.launch {
                   _tvShowList.value = UIState.Loading
-                  delay(2000)
+
                   popularTVShowRepo.getPopularTVShows().collect { tvShowList ->
                       when (tvShowList) {
                           is NetworkResult.ApiError -> {

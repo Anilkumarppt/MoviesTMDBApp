@@ -28,6 +28,7 @@ import com.impressico.moviesapp.data.remote.model.PopularMovieItem
 import com.impressico.moviesapp.data.remote.model.PopularTVShow
 import com.impressico.moviesapp.domain.model.PopularListDto
 import com.impressico.moviesapp.presentation.compose.PopularItemCard
+import com.impressico.moviesapp.presentation.compose.composebles.SnackbarDemo
 import com.impressico.moviesapp.presentation.compose.screen.MovieApp
 import com.impressico.moviesapp.presentation.compose.screen.MovieAppScreen
 import com.impressico.moviesapp.presentation.states.UIState
@@ -153,7 +154,7 @@ fun PopularList(
                     val isMovie=true
 
                     Log.d("MovieListScreen", "PopularList:")
-                    navController.navigate(MovieAppScreen.DetailsScreen.withArgs(movie))
+                    navController.navigate(MovieAppScreen.DetailsScreen.withArgs(movie, isMovie = true))
                     //navController.navigate(MovieAppScreen.DetailsScreen.route,bundle)
                 }
             }
@@ -168,7 +169,8 @@ fun PopularList(
 
                     val isMovie:Boolean=false
                     //navController.navigate(MovieAppScreen.DetailsScreen.withArgs(movie))
-                    navController.navigate(MovieAppScreen.DetailsScreen.withArgs(movie))
+
+                    navController.navigate(MovieAppScreen.DetailsScreen.withArgs(movie, isMovie = false))
                 }
             }
 

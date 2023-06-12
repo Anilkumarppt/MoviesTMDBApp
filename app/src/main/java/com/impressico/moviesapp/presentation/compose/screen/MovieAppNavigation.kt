@@ -24,12 +24,16 @@ fun MovieApp(){
             PopularListScreen(navController = navController, viewModel =popularListViewModel,tvViewModel )
         }
         composable(
-            route = MovieAppScreen.DetailsScreen.route + "/{movie_id}",
+            route = MovieAppScreen.DetailsScreen.route + "/{movie_id}/{is_movie}",
             arguments = listOf(
                 navArgument("movie_id") {
                     type = NavType.IntType
                     nullable = false
+                },
+                navArgument("is_movie"){
+                    type= NavType.BoolType
                 }
+
             )
         ) { entry ->
             val movieId=entry.arguments?.getInt("movie_id")
@@ -40,7 +44,7 @@ fun MovieApp(){
                 navController = navController,
                 popularTVShowViewModel =tvViewModel,
                 popularMovieViewModel =popularListViewModel,
-                isMovie = true
+                isMovie = entry.arguments?.getBoolean("is_movie")?:false
             )
         }
     }

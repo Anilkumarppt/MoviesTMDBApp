@@ -15,12 +15,10 @@ sealed class MovieAppScreen(val route:String){
 
         }
     }
-    fun withArgs(vararg args: Int, isMovie: Boolean): String {
+    fun withArgs( args: Int, isMovie: Boolean): String {
         return buildString {
             append(route)
-            args.forEach { arg ->
-                append("/$arg")
-            }
+            append("/$args")
             append("/$isMovie")
         }
     }

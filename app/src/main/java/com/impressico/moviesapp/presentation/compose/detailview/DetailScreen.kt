@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -43,7 +44,10 @@ fun DetailsScreen(
     popularMovieViewModel: PopularMovieViewModel,
     isMovie: Boolean
 ) {
-    Column(modifier = Modifier.fillMaxSize().background(md_theme_dark_onSecondary)) {
+
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(md_theme_dark_onSecondary)) {
         Log.d(TAG, "DetailsScreen: is Movie $isMovie")
         Log.d(TAG, "DetailsScreen: Item Id $itemId")
 
@@ -53,47 +57,49 @@ fun DetailsScreen(
                 popularTVShowViewModel.getTvShowDetail(tvShowId = itemId!!)
             }
 
-        val resultMovie = popularMovieViewModel.popularMovieItem.collectAsState().value
-        val resultTVshow = popularTVShowViewModel.tvShowDetail.collectAsState().value
-        var movieItem: PopularListDto
+            val resultMovie = popularMovieViewModel.popularMovieItem.collectAsState().value
+            val resultTVshow = popularTVShowViewModel.tvShowDetail.collectAsState().value
+            var movieItem: PopularListDto
 
-        when (resultMovie) {
-            is UIState.Error -> {}
-            is UIState.Exception -> {}
-            UIState.Ideal -> {}
-            UIState.Loading -> {}
-            UIState.NoInternet -> {}
-            is UIState.SUCCESS -> {
-                val movieData: Movie = resultMovie.data as Movie
-                movieItem = movieData.toPopularListDto()
-                ShowDetailsScreen(
-                    backDropUrl = NetworkConstants.BACKGROUND_BASE_URL + movieItem.backdrop_path!!,
-                    title = movieItem.title,
-                    rating = movieItem.vote_average,
-                    releaseDate = movieItem.release_date!!,
-                    overView = movieItem.overview
-                )
+            when (resultMovie) {
+                is UIState.Error -> {}
+                is UIState.Exception -> {}
+                UIState.Ideal -> {}
+                UIState.Loading -> {}
+                UIState.NoInternet -> {}
+                is UIState.SUCCESS -> {
+                    val movieData: Movie = resultMovie.data as Movie
+                    movieItem = movieData.toPopularListDto()
+                    ShowDetailsScreen(
+                        backDropUrl = NetworkConstants.BACKGROUND_BASE_URL + movieItem.backdrop_path!!,
+                        title = movieItem.title,
+                        rating = movieItem.vote_average,
+                        releaseDate = movieItem.release_date!!,
+                        overView = movieItem.overview
+                    )
+                }
             }
-        }
-        when (resultTVshow) {
-            is UIState.Error -> {}
-            is UIState.Exception -> {}
-            UIState.Ideal -> {}
-            UIState.Loading -> {}
-            UIState.NoInternet -> {}
-            is UIState.SUCCESS -> {
-                val tvShowData: PopularTVItem = resultTVshow.data as PopularTVItem
-                movieItem = tvShowData.toPopularListDto()
-                ShowDetailsScreen(
-                    backDropUrl = movieItem.backdrop_path!!,
-                    title = movieItem.title,
-                    rating = movieItem.vote_average,
-                    releaseDate = movieItem.release_date!!,
-                    overView = movieItem.overview
-                )
+            when (resultTVshow) {
+                is UIState.Error -> {}
+                is UIState.Exception -> {}
+                UIState.Ideal -> {}
+                UIState.Loading -> {}
+                UIState.NoInternet -> {}
+                is UIState.SUCCESS -> {
+                    val tvShowData: PopularTVItem = resultTVshow.data as PopularTVItem
+                    movieItem = tvShowData.toPopularListDto()
+                    ShowDetailsScreen(
+                        backDropUrl = movieItem.backdrop_path!!,
+                        title = movieItem.title,
+                        rating = movieItem.vote_average,
+                        releaseDate = movieItem.release_date!!,
+                        overView = movieItem.overview
+                    )
+                }
             }
+
         }
-    }
+
 }
 @Composable
 fun ShowDetailsScreen(backDropUrl: String,title: String,rating: Double,releaseDate: String,overView: String){
