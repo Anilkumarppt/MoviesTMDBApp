@@ -4,9 +4,12 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,19 +20,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.impressico.moviesapp.data.NetworkConstants
 import com.impressico.moviesapp.data.remote.model.Movie
 import com.impressico.moviesapp.data.remote.model.PopularTVItem
-import com.impressico.moviesapp.domain.model.PopularListDto
 import com.impressico.moviesapp.presentation.compose.composebles.FavoriteIcon
 import com.impressico.moviesapp.presentation.states.UIState
 import com.impressico.moviesapp.presentation.ui.theme.lightGray
 import com.impressico.moviesapp.presentation.ui.theme.md_theme_dark_onSecondary
-import com.impressico.moviesapp.presentation.ui.theme.md_theme_light_background
 import com.impressico.moviesapp.presentation.ui.theme.md_theme_light_surface
 import com.impressico.moviesapp.presentation.viewmodels.PopularMovieViewModel
 import com.impressico.moviesapp.presentation.viewmodels.PopularTVShowViewModel
@@ -37,72 +37,42 @@ import com.impressico.moviesapp.presentation.viewmodels.PopularTVShowViewModel
 private const val TAG = "Details Screen"
 
 @Composable
-fun DetailsScreen(
+fun MovieDetailsScreen(
     itemId: Int?,
     navController: NavController,
-    popularTVShowViewModel: PopularTVShowViewModel,
     popularMovieViewModel: PopularMovieViewModel,
-    isMovie: Boolean
 ) {
-
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(md_theme_dark_onSecondary)) {
-        Log.d(TAG, "DetailsScreen: is Movie $isMovie")
-        Log.d(TAG, "DetailsScreen: Item Id $itemId")
-
-            if (isMovie) {
-                popularMovieViewModel.getMovieDetails(movieId = itemId!!)
-            } else {
-                popularTVShowViewModel.getTvShowDetail(tvShowId = itemId!!)
-            }
-
-            val resultMovie = popularMovieViewModel.popularMovieItem.collectAsState().value
-            val resultTVshow = popularTVShowViewModel.tvShowDetail.collectAsState().value
-            var movieItem: PopularListDto
-
-            when (resultMovie) {
-                is UIState.Error -> {}
-                is UIState.Exception -> {}
-                UIState.Ideal -> {}
-                UIState.Loading -> {}
-                UIState.NoInternet -> {}
-                is UIState.SUCCESS -> {
-                    val movieData: Movie = resultMovie.data as Movie
-                    movieItem = movieData.toPopularListDto()
-                    ShowDetailsScreen(
-                        backDropUrl = NetworkConstants.BACKGROUND_BASE_URL + movieItem.backdrop_path!!,
-                        title = movieItem.title,
-                        rating = movieItem.vote_average,
-                        releaseDate = movieItem.release_date!!,
-                        overView = movieItem.overview
-                    )
-                }
-            }
-            when (resultTVshow) {
-                is UIState.Error -> {}
-                is UIState.Exception -> {}
-                UIState.Ideal -> {}
-                UIState.Loading -> {}
-                UIState.NoInternet -> {}
-                is UIState.SUCCESS -> {
-                    val tvShowData: PopularTVItem = resultTVshow.data as PopularTVItem
-                    movieItem = tvShowData.toPopularListDto()
-                    ShowDetailsScreen(
-                        backDropUrl = movieItem.backdrop_path!!,
-                        title = movieItem.title,
-                        rating = movieItem.vote_average,
-                        releaseDate = movieItem.release_date!!,
-                        overView = movieItem.overview
-                    )
-                }
-            }
-
+        LaunchedEffect(key1 = itemId) {
+            popularMovieViewModel.getMovieDetails(itemId!!)
         }
-
+        val value = popularMovieViewModel.popularMovieItem.collectAsState().value
+        when(value){
+            is UIState.Error -> {}
+            is UIState.Exception -> {}
+            UIState.Ideal -> {}
+            UIState.Loading -> {}
+            UIState.NoInternet -> {}
+            is UIState.SUCCESS -> {
+                val movieData: Movie = value.data as Movie
+                ShowDetailsScreen(
+                    backDropUrl = NetworkConstants.BACKGROUND_BASE_URL + movieData.backdrop_path,
+                    title =movieData.title,
+                    rating =movieData.vote_average,
+                    releaseDate = movieData.release_date,
+                    overView = movieData.overview
+                )
+            }
+        }
 }
+
 @Composable
-fun ShowDetailsScreen(backDropUrl: String,title: String,rating: Double,releaseDate: String,overView: String){
+fun ShowDetailsScreen(
+    backDropUrl: String,
+    title: String,
+    rating: Double,
+    releaseDate: String,
+    overView: String
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -112,7 +82,12 @@ fun ShowDetailsScreen(backDropUrl: String,title: String,rating: Double,releaseDa
             backDropUrl = backDropUrl,
             title = ""
         )
-        DetailTitleRow(title = title, rating =rating, releaseDate = releaseDate, overView = overView)
+        DetailTitleRow(
+            title = title,
+            rating = rating,
+            releaseDate = releaseDate,
+            overView = overView
+        )
     }
 }
 

@@ -6,12 +6,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -154,7 +156,7 @@ fun PopularList(
                     val isMovie=true
 
                     Log.d("MovieListScreen", "PopularList:")
-                    navController.navigate(MovieAppScreen.DetailsScreen.withArgs(movie, isMovie = true))
+                    navController.navigate(MovieAppScreen.DetailsScreen.withArgs(movie))
                     //navController.navigate(MovieAppScreen.DetailsScreen.route,bundle)
                 }
             }
@@ -167,10 +169,7 @@ fun PopularList(
                     "Popular TV Shows"
                 ) { movie ->
 
-                    val isMovie:Boolean=false
-                    //navController.navigate(MovieAppScreen.DetailsScreen.withArgs(movie))
-
-                    navController.navigate(MovieAppScreen.DetailsScreen.withArgs(movie, isMovie = false))
+                    navController.navigate(MovieAppScreen.TVShowDetailsScreen.withArgs(movie))
                 }
             }
 
@@ -196,8 +195,10 @@ fun PopularMoviesList(
         Column(modifier = Modifier.fillMaxWidth()) {
             HeadingText(heading = headerText)
         }
+
         Column(modifier = Modifier.fillMaxWidth()) {
-            LazyRow(content = {
+            LazyRow(
+                content = {
                 items(movieItems){item ->
                     PopularItemCard(
                         posterPath = item.poster_path!!,

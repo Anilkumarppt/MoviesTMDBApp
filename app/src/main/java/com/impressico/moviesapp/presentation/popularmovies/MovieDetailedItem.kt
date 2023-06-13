@@ -126,7 +126,7 @@ class MovieDetailedItem : Fragment() {
                         UIState.NoInternet ->{}
                         is UIState.SUCCESS -> {
                             try {
-                                val movieData: Movie= movie.data as Movie
+                                    val movieData: Movie= movie.data as Movie
                                 //mBinding.movieItem=movieData
                                 bindData(movieData.toPopularListDto())
                             }

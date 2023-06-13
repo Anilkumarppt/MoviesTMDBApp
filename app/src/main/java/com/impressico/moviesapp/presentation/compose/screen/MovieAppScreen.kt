@@ -4,7 +4,7 @@ sealed class MovieAppScreen(val route:String){
 
     object MainScreen:MovieAppScreen("main_screen")
     object DetailsScreen:MovieAppScreen("details_screen")
-
+    object TVShowDetailsScreen:MovieAppScreen("tvshow_screen")
     fun withArgs(vararg args:Int):String{
 
         return buildString {
